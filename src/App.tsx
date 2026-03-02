@@ -91,7 +91,7 @@ const InternationalWomensDayYoga = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: "deepak2603dk@gmail.com",
+          to: "deepak2603om@gmail.com",
           text: "yoga registration",
           subject: "New Registration for Vivacious Yoga",
           html: generateHtml(formData.name, formData.email),
