@@ -3,18 +3,18 @@ import { useState } from "react";
 import { toast, Toaster } from "sonner";
 
 const InternationalWomensDayYoga = () => {
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [isSubmitting, setIsSubmitting] = useState(false); // New loading state
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { type, value } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [type === "email" ? "email" : "name"]: value,
+      [name]: value,
     }));
   };
 
-  const generateHtml = (name: string, email: string) =>
+  const generateHtml = (name: string, email: string, phone: string) =>
     `<!DOCTYPE html>
 <html>
 <head>
@@ -54,6 +54,7 @@ const InternationalWomensDayYoga = () => {
             <td style="font-size:14px;color:#444;">
               <strong>Full Name:</strong> ${name} <br/><br/>
               <strong>Email Address:</strong> ${email} <br/><br/>
+              <strong>Phone Number:</strong> ${phone} <br/><br/>
               <strong>Registration Time:</strong> ${new Date().toLocaleString()}
             </td>
           </tr>
@@ -87,27 +88,30 @@ const InternationalWomensDayYoga = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/send-email`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: "deepak2603om@gmail.com",
-          text: "yoga registration",
-          subject: "New Registration for Vivacious Yoga",
-          html: generateHtml(formData.name, formData.email),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/send-email`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: "deepak2603om@gmail.com",
+            text: "yoga registration",
+            subject: "New Registration for Vivacious Yoga",
+            html: generateHtml(formData.name, formData.email, formData.phone),
+          }),
+        },
+      );
 
       if (response.ok) {
         toast.success("Registration Successful!", {
           description: "Check your email for confirmation.",
           duration: 4000,
         });
-        setFormData({ name: "", email: "" });
+        setFormData({ name: "", email: "", phone: "" });
       } else {
         throw new Error("Failed to send");
       }
-    } catch  {
+    } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -118,7 +122,7 @@ const InternationalWomensDayYoga = () => {
     <div className="min-h-screen bg-[#F7F4F1] flex items-center justify-center px-4 py-6 md:py-14 font-sans">
       {/* Added position and richColors to Toaster for better animation */}
       <Toaster position="top-center" richColors closeButton />
-      
+
       <div className="max-w-5xl w-full flex flex-col gap-4">
         <div className="text-center space-y-1">
           <h2 className="text-3xl md:text-4xl font-serif text-[#4F6F52] tracking-tight">
@@ -183,6 +187,7 @@ const InternationalWomensDayYoga = () => {
                 </label>
                 <input
                   required
+                  name="name"
                   type="text"
                   placeholder="e.g. Sarah Jenkins"
                   className="w-full bg-transparent border-b border-stone-200 py-1 outline-none focus:border-[#86A789] transition-all placeholder:text-stone-300 text-stone-700"
@@ -197,6 +202,7 @@ const InternationalWomensDayYoga = () => {
                 </label>
                 <input
                   required
+                  name="email"
                   type="email"
                   placeholder="sarah@example.com"
                   value={formData.email}
@@ -205,7 +211,22 @@ const InternationalWomensDayYoga = () => {
                 />
               </div>
 
-              <button 
+              <div className="group">
+                <label className="text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1 transition-colors group-focus-within:text-[#86A789]">
+                  Phone Number
+                </label>
+                <input
+                  required
+                  name="phone"
+                  type="tel"
+                  placeholder="+91 98765 43210"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full bg-transparent border-b border-stone-200 py-1 outline-none focus:border-[#86A789] transition-all placeholder:text-stone-300 text-stone-700"
+                />
+              </div>
+
+              <button
                 disabled={isSubmitting}
                 className="w-full bg-[#4F6F52] hover:bg-[#3A533E] disabled:bg-stone-400 text-white py-4 rounded-2xl font-semibold tracking-wide shadow-xl shadow-[#4f6f52]/20 transition-all hover:shadow-none active:scale-[0.97] mt-4 flex items-center justify-center gap-2"
               >
