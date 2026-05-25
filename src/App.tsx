@@ -249,7 +249,7 @@ onSubmit: async ({ value }) => {
 
                     <input
                       type="tel"
-                      placeholder="+91 98765 43210"
+                      placeholder="98765 43210"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       className="w-full bg-transparent border-b border-stone-200 py-2 outline-none focus:border-[#86A789] transition-all placeholder:text-stone-300 text-stone-700"
